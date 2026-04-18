@@ -1,6 +1,8 @@
 import './globals.css'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'WA Commerce Admin',
   description: 'Painel de administração WhatsApp Commerce',
