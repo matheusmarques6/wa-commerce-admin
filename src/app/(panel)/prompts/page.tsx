@@ -1,4 +1,5 @@
 import { createAdminClient } from '@/lib/supabase-server'
+import CreatePromptModal from './CreatePromptModal'
 
 const flowLabels: Record<string, string> = {
   cart_abandoned: 'Carrinho', checkout_abandoned: 'Checkout',
@@ -15,18 +16,22 @@ const frameworkColors: Record<string, string> = {
 export default async function PromptsPage() {
   const supabase = createAdminClient()
 
-  const [{ data: defaults }, { data: overrides }] = await Promise.all([
+  const [{ data: defaults }, { data: overrides }, { data: tenants }] = await Promise.all([
     supabase.from('recovery_prompts_defaults').select('*').eq('is_active', true).order('flow_type').order('touch_number'),
     supabase.from('recovery_prompts').select('*, tenants(name)').eq('is_active', true).order('flow_type').order('touch_number'),
+    supabase.from('tenants').select('id, name').is('deleted_at', null).order('name')
   ])
 
   const flowTypes = [...new Set((defaults || []).map((d: any) => d.flow_type))]
 
   return (
     <div>
-      <div className="mb-5">
-        <h2 className="text-xl font-semibold" style={{ color: '#e8e8f0' }}>Recovery Prompts</h2>
-        <p className="text-sm" style={{ color: '#8888a0' }}>Defaults do playbook + overrides por loja</p>
+      <div className="flex justify-between items-center mb-5">
+        <div>
+          <h2 className="text-xl font-semibold" style={{ color: '#e8e8f0' }}>Recovery Prompts</h2>
+          <p className="text-sm" style={{ color: '#8888a0' }}>Defaults do playbook + overrides por loja</p>
+        </div>
+        <CreatePromptModal tenants={tenants || []} />
       </div>
 
       <div className="mb-6 rounded-xl p-5" style={{ background: '#12121c', border: '1px solid #2a2a3e' }}>

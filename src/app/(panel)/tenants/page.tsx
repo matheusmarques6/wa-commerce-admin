@@ -1,4 +1,5 @@
 import { createAdminClient } from '@/lib/supabase-server'
+import CreateTenantModal from './CreateTenantModal'
 
 export default async function TenantsPage() {
   const supabase = createAdminClient()
@@ -15,6 +16,7 @@ export default async function TenantsPage() {
           <h2 className="text-xl font-semibold" style={{ color: '#e8e8f0' }}>Lojas</h2>
           <p className="text-sm" style={{ color: '#8888a0' }}>{(tenants || []).length} lojas cadastradas</p>
         </div>
+        <CreateTenantModal />
       </div>
 
       <div className="grid gap-3.5">
@@ -22,7 +24,10 @@ export default async function TenantsPage() {
           <div key={i} className="rounded-xl p-5 animate-fade-up" style={{ background: '#12121c', border: '1px solid #2a2a3e', animationDelay: `${i * 60}ms` }}>
             <div className="flex justify-between items-start mb-4">
               <div>
-                <h3 className="text-base font-semibold" style={{ color: '#e8e8f0' }}>{t.name}</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-semibold" style={{ color: '#e8e8f0' }}>{t.name}</h3>
+                  <code className="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-text select-all" style={{ background: '#2a2a3e', color: '#8888a0' }}>{t.id}</code>
+                </div>
                 <p className="text-xs mt-1" style={{ color: '#5a5a72' }}>{t.shopify_domain}</p>
               </div>
               <div className="flex gap-2">

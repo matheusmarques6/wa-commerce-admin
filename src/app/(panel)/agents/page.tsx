@@ -1,18 +1,21 @@
 import { createAdminClient } from '@/lib/supabase-server'
+import CreateAgentModal from './CreateAgentModal'
 
 export default async function AgentsPage() {
   const supabase = createAdminClient()
-  const { data: agents } = await supabase
-    .from('agents')
-    .select('*, tenants(name)')
-    .eq('is_active', true)
-    .order('created_at', { ascending: false })
+  const [{ data: agents }, { data: tenants }] = await Promise.all([
+    supabase.from('agents').select('*, tenants(name)').eq('is_active', true).order('created_at', { ascending: false }),
+    supabase.from('tenants').select('id, name').is('deleted_at', null).order('name')
+  ])
 
   return (
     <div>
-      <div className="mb-5">
-        <h2 className="text-xl font-semibold" style={{ color: '#e8e8f0' }}>Agentes IA</h2>
-        <p className="text-sm" style={{ color: '#8888a0' }}>Briefing, tom de voz e conhecimento por loja</p>
+      <div className="flex justify-between items-center mb-5">
+        <div>
+          <h2 className="text-xl font-semibold" style={{ color: '#e8e8f0' }}>Agentes IA</h2>
+          <p className="text-sm" style={{ color: '#8888a0' }}>Briefing, tom de voz e conhecimento por loja</p>
+        </div>
+        <CreateAgentModal tenants={tenants || []} />
       </div>
 
       <div className="grid grid-cols-2 gap-3.5">
