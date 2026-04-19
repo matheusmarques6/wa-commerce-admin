@@ -6,8 +6,12 @@ import { revalidatePath } from 'next/cache'
 export async function createTenant(formData: FormData) {
   const supabase = createAdminClient()
   
+  const name = formData.get('name')?.toString() || ''
+  const slug = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')
+
   const payload = {
-    name: formData.get('name')?.toString(),
+    name: name,
+    slug: slug,
     shopify_domain: formData.get('shopify_domain')?.toString(),
     timezone: formData.get('timezone')?.toString(),
     max_touches_per_flow: 3,
