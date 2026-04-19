@@ -76,6 +76,10 @@ export default function CreateTenantModal() {
               <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Timezone</label>
               <input name="timezone" defaultValue="America/Sao_Paulo" className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any} />
             </div>
+            <div>
+              <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Worder Org ID (Opcional por enquanto)</label>
+              <input name="worder_org_id" className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2 font-mono" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any} placeholder="Ex: 550e8400-e29b-41d4-a716-446655440000" />
+            </div>
             
           {error && <div className="p-3 rounded-lg text-sm" style={{ background: '#ef444418', color: '#ef4444', border: '1px solid #ef444433' }}>{error}</div>}
 

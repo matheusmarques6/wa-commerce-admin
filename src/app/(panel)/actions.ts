@@ -12,6 +12,7 @@ export async function createTenant(formData: FormData) {
   const payload = {
     name: name,
     slug: slug,
+    worder_org_id: formData.get('worder_org_id')?.toString() || null,
     shopify_domain: formData.get('shopify_domain')?.toString(),
     timezone: formData.get('timezone')?.toString(),
     max_touches_per_flow: 3,
@@ -30,6 +31,34 @@ export async function createTenant(formData: FormData) {
 
   revalidatePath('/tenants')
   return { success: true, id: data?.id }
+}
+
+export async function updateTenant(formData: FormData) {
+  const supabase = createAdminClient()
+  const id = formData.get('id')?.toString()
+
+  if (!id) return { error: 'ID da loja não encontrado' }
+  
+  const payload: any = {
+    name: formData.get('name')?.toString(),
+    shopify_domain: formData.get('shopify_domain')?.toString(),
+    timezone: formData.get('timezone')?.toString(),
+  }
+
+  const worder_org_id = formData.get('worder_org_id')?.toString()
+  if (worder_org_id !== undefined) {
+    payload.worder_org_id = worder_org_id === '' ? null : worder_org_id
+  }
+
+  const { error } = await supabase.from('tenants').update(payload).eq('id', id)
+  
+  if (error) {
+    console.error('Error updating tenant:', error)
+    return { error: error.message }
+  }
+
+  revalidatePath('/tenants')
+  return { success: true }
 }
 
 export async function createAgent(formData: FormData) {

@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase-server'
 import CreateTenantModal from './CreateTenantModal'
 import LinkWhatsAppModal from './LinkWhatsAppModal'
+import EditTenantModal from './EditTenantModal'
 
 export default async function TenantsPage() {
   const supabase = createAdminClient()
@@ -30,10 +31,17 @@ export default async function TenantsPage() {
                   <code className="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-text select-all" style={{ background: '#2a2a3e', color: '#8888a0' }}>{t.id}</code>
                 </div>
                 <p className="text-xs mt-1" style={{ color: '#5a5a72' }}>{t.shopify_domain}</p>
+                {t.worder_org_id && (
+                  <p className="text-[10px] mt-1 flex items-center gap-1" style={{ color: '#8888a0' }}>
+                    <span className="uppercase" style={{ color: '#5a5a72' }}>Worder Org ID:</span>
+                    <code className="font-mono text-[#22c55e]">{t.worder_org_id}</code>
+                  </p>
+                )}
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold" style={{ background: t.status === 'active' ? '#22c55e18' : '#f59e0b18', color: t.status === 'active' ? '#22c55e' : '#f59e0b' }}>{t.status}</span>
                 <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold capitalize" style={{ background: '#3b82f618', color: '#3b82f6' }}>{t.plan}</span>
+                <EditTenantModal tenant={t} />
               </div>
             </div>
 
