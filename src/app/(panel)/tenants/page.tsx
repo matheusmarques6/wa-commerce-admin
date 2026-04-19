@@ -36,12 +36,9 @@ export default async function TenantsPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-4 gap-3 mb-4">
+            <div className="grid grid-cols-2 gap-3 mb-4">
               {[
                 { label: 'Timezone', value: t.timezone?.replace('America/', '') },
-                { label: 'Max toques', value: t.max_touches_per_flow },
-                { label: 'Cooldown', value: `${t.recovery_cooldown_hours}h` },
-                { label: 'Limite mkt/dia', value: t.daily_marketing_limit || 'Sem limite' },
               ].map((f, j) => (
                 <div key={j} className="rounded-lg p-3" style={{ background: '#0c0c14', border: '1px solid #2a2a3e44' }}>
                   <div className="text-[10px] uppercase tracking-wider mb-1" style={{ color: '#5a5a72' }}>{f.label}</div>

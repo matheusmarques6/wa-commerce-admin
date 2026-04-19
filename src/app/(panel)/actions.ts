@@ -10,9 +10,9 @@ export async function createTenant(formData: FormData) {
     name: formData.get('name')?.toString(),
     shopify_domain: formData.get('shopify_domain')?.toString(),
     timezone: formData.get('timezone')?.toString(),
-    max_touches_per_flow: Number(formData.get('max_touches_per_flow')),
-    recovery_cooldown_hours: Number(formData.get('recovery_cooldown_hours')),
-    daily_marketing_limit: Number(formData.get('daily_marketing_limit') || 0),
+    max_touches_per_flow: 3,
+    recovery_cooldown_hours: 24,
+    daily_marketing_limit: 0,
     status: 'active',
     plan: 'starter'
   }
