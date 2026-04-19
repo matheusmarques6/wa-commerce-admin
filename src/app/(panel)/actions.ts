@@ -7,11 +7,9 @@ export async function createTenant(formData: FormData) {
   const supabase = createAdminClient()
   
   const name = formData.get('name')?.toString() || ''
-  const slug = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')
 
   const payload = {
     name: name,
-    slug: slug,
     worder_org_id: formData.get('worder_org_id')?.toString() || null,
     shopify_domain: formData.get('shopify_domain')?.toString(),
     timezone: formData.get('timezone')?.toString(),
