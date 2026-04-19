@@ -1,3 +1,4 @@
+import { createAdminClient } from '@/lib/supabase-server'
 import CreateTenantModal from './CreateTenantModal'
 import LinkWhatsAppModal from './LinkWhatsAppModal'
 
