@@ -40,7 +40,6 @@ export default async function TenantsPage() {
               </div>
               <div className="flex gap-2 items-center">
                 <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold" style={{ background: t.status === 'active' ? '#22c55e18' : '#f59e0b18', color: t.status === 'active' ? '#22c55e' : '#f59e0b' }}>{t.status}</span>
-                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold capitalize" style={{ background: '#3b82f618', color: '#3b82f6' }}>{t.plan}</span>
                 <EditTenantModal tenant={t} />
               </div>
             </div>

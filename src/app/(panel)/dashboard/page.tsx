@@ -51,7 +51,7 @@ export default async function DashboardPage() {
           <table className="w-full text-sm" style={{ borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid #2a2a3e' }}>
-                {['Loja','Dominio','Plano','Status'].map(h => (
+                {['Loja','Dominio','Status'].map(h => (
                   <th key={h} className="text-left py-2.5 px-3 text-[11px] font-semibold uppercase tracking-wider" style={{ color: '#5a5a72' }}>{h}</th>
                 ))}
               </tr>
@@ -61,7 +61,6 @@ export default async function DashboardPage() {
                 <tr key={i} style={{ borderBottom: '1px solid #2a2a3e22' }}>
                   <td className="py-3 px-3 font-semibold" style={{ color: '#e8e8f0' }}>{t.name}</td>
                   <td className="py-3 px-3 text-xs" style={{ color: '#8888a0' }}>{t.shopify_domain}</td>
-                  <td className="py-3 px-3 capitalize" style={{ color: '#8888a0' }}>{t.plan}</td>
                   <td className="py-3 px-3">
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold" style={{ background: '#22c55e18', color: '#22c55e' }}>
                       <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#22c55e' }} />

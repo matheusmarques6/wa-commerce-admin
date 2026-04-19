@@ -18,8 +18,7 @@ export async function createTenant(formData: FormData) {
     max_touches_per_flow: 3,
     recovery_cooldown_hours: 24,
     daily_marketing_limit: 0,
-    status: 'active',
-    plan: 'starter'
+    status: 'active'
   }
 
   const { data, error } = await supabase.from('tenants').insert([payload]).select().single()
