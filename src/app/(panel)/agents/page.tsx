@@ -5,7 +5,7 @@ export default async function AgentsPage() {
   const supabase = createAdminClient()
   const [{ data: agents }, { data: tenants }] = await Promise.all([
     supabase.from('agents').select('*, tenants(name)').eq('is_active', true).order('created_at', { ascending: false }),
-    supabase.from('tenants').select('id, name').is('deleted_at', null).order('name')
+    supabase.from('tenants').select('id, name').order('name')
   ])
 
   return (

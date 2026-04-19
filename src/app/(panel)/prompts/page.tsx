@@ -19,7 +19,7 @@ export default async function PromptsPage() {
   const [{ data: defaults }, { data: overrides }, { data: tenants }] = await Promise.all([
     supabase.from('recovery_prompts_defaults').select('*').eq('is_active', true).order('flow_type').order('touch_number'),
     supabase.from('recovery_prompts').select('*, tenants(name)').eq('is_active', true).order('flow_type').order('touch_number'),
-    supabase.from('tenants').select('id, name').is('deleted_at', null).order('name')
+    supabase.from('tenants').select('id, name').order('name')
   ])
 
   const flowTypes = [...new Set((defaults || []).map((d: any) => d.flow_type))]

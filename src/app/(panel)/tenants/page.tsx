@@ -8,7 +8,6 @@ export default async function TenantsPage() {
   const { data: tenants } = await supabase
     .from('tenants')
     .select('*, whatsapp_accounts(phone_number, quality_rating, is_active)')
-    .is('deleted_at', null)
     .order('name')
 
   return (

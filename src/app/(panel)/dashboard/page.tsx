@@ -8,7 +8,7 @@ export default async function DashboardPage() {
     { data: activeFlows },
     { data: todayMetrics },
   ] = await Promise.all([
-    supabase.from('tenants').select('*').eq('status', 'active').is('deleted_at', null).order('name'),
+    supabase.from('tenants').select('*').eq('status', 'active').order('name'),
     supabase.from('recovery_flows').select('*, contacts(name, phone)').in('status', ['pending','active','waiting_reply','paused']).order('next_action_at').limit(20),
     supabase.from('daily_metrics').select('*').eq('metric_date', new Date().toISOString().split('T')[0]),
   ])
