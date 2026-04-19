@@ -96,7 +96,6 @@ export async function createRecoveryPromptOverride(formData: FormData) {
     customer_emotional_state: formData.get('customer_emotional_state')?.toString(),
     is_active: true
   }
-
   const { error } = await supabase.from('recovery_prompts').insert([payload])
 
   if (error) {
@@ -105,5 +104,26 @@ export async function createRecoveryPromptOverride(formData: FormData) {
   }
 
   revalidatePath('/prompts')
+  return { success: true }
+}
+
+export async function linkWhatsAppAccount(formData: FormData) {
+  const supabase = createAdminClient()
+
+  const payload = {
+    tenant_id: formData.get('tenant_id')?.toString(),
+    phone_number: formData.get('phone_number')?.toString(),
+    quality_rating: 'GREEN',
+    is_active: formData.get('is_active') === 'on'
+  }
+
+  const { error } = await supabase.from('whatsapp_accounts').insert([payload])
+
+  if (error) {
+    console.error('Error linking whatsapp:', error)
+    return { error: error.message }
+  }
+
+  revalidatePath('/tenants')
   return { success: true }
 }

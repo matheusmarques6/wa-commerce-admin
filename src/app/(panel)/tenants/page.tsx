@@ -1,5 +1,5 @@
-import { createAdminClient } from '@/lib/supabase-server'
 import CreateTenantModal from './CreateTenantModal'
+import LinkWhatsAppModal from './LinkWhatsAppModal'
 
 export default async function TenantsPage() {
   const supabase = createAdminClient()
