@@ -66,10 +66,34 @@ export default function LinkWhatsAppModal({ tenantId }: Props) {
 
           <div className="flex items-center gap-2 mt-2">
             <input type="checkbox" id="is_active" name="is_active" defaultChecked className="rounded" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', accentColor: '#22c55e' } as any} />
-            <label htmlFor="is_active" className="text-sm font-semibold" style={{ color: '#e8e8f0' }}>Contabilizar este número como Ativo e Saudável</label>
+            <label htmlFor="is_active" className="text-sm font-semibold" style={{ color: '#e8e8f0' }}>Contabilizar este número como Ativo</label>
           </div>
 
-          {error && <div className="p-3 rounded-lg text-sm mt-3" style={{ background: '#ef444418', color: '#ef4444', border: '1px solid #ef444433' }}>{error}</div>}
+          <div className="mt-2 pt-4 border-t" style={{ borderColor: '#2a2a3e' }}>
+            <h4 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#8888a0' }}>Meta Cloud API (Opcional)</h4>
+            <div className="grid gap-3">
+              <div>
+                <label className="block text-[10px] font-semibold mb-1 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Display Phone Number</label>
+                <input 
+                  name="display_phone_number" 
+                  className="w-full px-3 py-1.5 rounded-lg text-sm outline-none focus:ring-2 font-mono" 
+                  style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any} 
+                  placeholder="Ex: 553175080404" 
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-semibold mb-1 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Phone Number ID</label>
+                <input 
+                  name="phone_number_id" 
+                  className="w-full px-3 py-1.5 rounded-lg text-sm outline-none focus:ring-2 font-mono" 
+                  style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any} 
+                  placeholder="Ex: 1050081151524604" 
+                />
+              </div>
+            </div>
+          </div>
+
+          {error && <div className="p-3 rounded-lg text-sm mt-1" style={{ background: '#ef444418', color: '#ef4444', border: '1px solid #ef444433' }}>{error}</div>}
 
           <div className="flex justify-end gap-3 mt-4">
             <button type="button" onClick={handleClose} className="px-4 py-2 rounded-lg text-sm font-semibold transition-colors" style={{ color: '#8888a0' }}>Cancelar</button>

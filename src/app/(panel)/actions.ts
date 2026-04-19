@@ -139,11 +139,26 @@ export async function createRecoveryPromptOverride(formData: FormData) {
 export async function linkWhatsAppAccount(formData: FormData) {
   const supabase = createAdminClient()
 
-  const payload = {
+  const display_phone_number = formData.get('display_phone_number')?.toString()
+  const phone_number_id = formData.get('phone_number_id')?.toString()
+  
+  let metadata = null
+  if (display_phone_number || phone_number_id) {
+    metadata = {
+      display_phone_number: display_phone_number || '',
+      phone_number_id: phone_number_id || ''
+    }
+  }
+
+  const payload: any = {
     tenant_id: formData.get('tenant_id')?.toString(),
     phone_number: formData.get('phone_number')?.toString(),
     quality_rating: 'GREEN',
     is_active: formData.get('is_active') === 'on'
+  }
+
+  if (metadata) {
+    payload.metadata = metadata
   }
 
   const { error } = await supabase.from('whatsapp_accounts').insert([payload])
