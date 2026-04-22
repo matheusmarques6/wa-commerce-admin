@@ -17,7 +17,7 @@ export default async function PromptsPage() {
   const supabase = createAdminClient()
 
   const [{ data: defaults }, { data: overrides }, { data: tenants }] = await Promise.all([
-    supabase.from('recovery_prompts_defaults').select('*').eq('is_active', true).order('flow_type').order('touch_number'),
+    supabase.from('prompt').select('*').eq('is_active', true).order('flow_type').order('touch_number'),
     supabase.from('recovery_prompts').select('*, tenants(name)').eq('is_active', true).order('flow_type').order('touch_number'),
     supabase.from('tenants').select('id, name').order('name')
   ])
@@ -38,7 +38,7 @@ export default async function PromptsPage() {
         <h3 className="text-sm font-semibold mb-4" style={{ color: '#e8e8f0' }}>Defaults do playbook ({(defaults || []).length} prompts)</h3>
 
         {flowTypes.length === 0 ? (
-          <p className="text-sm py-8 text-center" style={{ color: '#5a5a72' }}>Nenhum prompt default cadastrado. Popule a tabela recovery_prompts_defaults.</p>
+          <p className="text-sm py-8 text-center" style={{ color: '#5a5a72' }}>Nenhum prompt default cadastrado. Popule a tabela prompt.</p>
         ) : (
           flowTypes.map((ft: string) => {
             const prompts = (defaults || []).filter((d: any) => d.flow_type === ft)
@@ -60,9 +60,10 @@ export default async function PromptsPage() {
                       </div>
                       <div className="p-3">
                         <div className="text-xs font-medium mb-2" style={{ color: '#e8e8f0' }}>{p.label}</div>
-                        <div className="flex gap-1.5 mb-2">
+                        <div className="flex gap-1.5 mb-2 flex-wrap">
                           <span className="px-1.5 py-0.5 rounded text-[9px]" style={{ background: p.message_type === 'utility' ? '#22c55e18' : '#f59e0b18', color: p.message_type === 'utility' ? '#22c55e' : '#f59e0b' }}>{p.message_type}</span>
                           <span className="px-1.5 py-0.5 rounded text-[9px]" style={{ background: '#2a2a3e', color: '#8888a0' }}>{p.delay_minutes}min</span>
+                          {p.trigger_event && <span className="px-1.5 py-0.5 rounded text-[9px]" style={{ background: '#3b82f618', color: '#3b82f6' }}>{p.trigger_event}</span>}
                         </div>
                         <div className="text-[11px] leading-relaxed line-clamp-3" style={{ color: '#5a5a72' }}>{p.customer_emotional_state}</div>
                       </div>

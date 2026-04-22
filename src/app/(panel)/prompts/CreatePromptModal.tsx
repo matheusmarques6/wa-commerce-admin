@@ -25,6 +25,27 @@ const flowTypes = [
 
 const frameworks = ['hook', 'story', 'offer', 'hook_story', 'hook_offer', 'story_offer', 'utility']
 
+const triggerEvents: { group: string; options: { id: string; label: string }[] }[] = [
+  { group: 'CARRINHO', options: [
+    { id: 'carrinho_criado', label: 'Carrinho Criado' },
+    { id: 'carrinho_atualizado', label: 'Carrinho Atualizado' },
+  ]},
+  { group: 'CHECKOUT', options: [
+    { id: 'checkout_criado', label: 'Checkout Criado' },
+    { id: 'checkout_atualizado', label: 'Checkout Atualizado' },
+    { id: 'checkout_deletado', label: 'Checkout Deletado' },
+  ]},
+  { group: 'PEDIDO', options: [
+    { id: 'pedido_criado', label: 'Pedido Criado' },
+    { id: 'pedido_pago', label: 'Pedido Pago' },
+    { id: 'pedido_concluido', label: 'Pedido Concluído' },
+    { id: 'pedido_cancelado', label: 'Pedido Cancelado' },
+  ]},
+  { group: 'REEMBOLSO', options: [
+    { id: 'reembolso_criado', label: 'Reembolso Criado' },
+  ]},
+]
+
 export default function CreatePromptModal({ tenants }: Props) {
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -104,6 +125,18 @@ export default function CreatePromptModal({ tenants }: Props) {
               <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Número do Toque</label>
               <input type="number" name="touch_number" required min="1" max="10" defaultValue="1" className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any} />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Evento Gatilho (Webhook Shopify)</label>
+            <select name="trigger_event" required className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any}>
+              <option value="">Selecione o evento...</option>
+              {triggerEvents.map(g => (
+                <optgroup key={g.group} label={g.group}>
+                  {g.options.map(o => <option key={o.id} value={o.id}>{o.label}</option>)}
+                </optgroup>
+              ))}
+            </select>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

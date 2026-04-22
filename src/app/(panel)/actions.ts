@@ -88,6 +88,7 @@ export async function createRecoveryPromptDefault(formData: FormData) {
 
   const payload = {
     flow_type: formData.get('flow_type')?.toString(),
+    trigger_event: formData.get('trigger_event')?.toString() || null,
     touch_number: Number(formData.get('touch_number')),
     brunson_framework: formData.get('brunson_framework')?.toString(),
     label: formData.get('label')?.toString(),
@@ -97,7 +98,7 @@ export async function createRecoveryPromptDefault(formData: FormData) {
     is_active: true
   }
 
-  const { error } = await supabase.from('recovery_prompts_defaults').insert([payload])
+  const { error } = await supabase.from('prompt').insert([payload])
 
   if (error) {
     console.error('Error creating default prompt:', error)
@@ -114,6 +115,7 @@ export async function createRecoveryPromptOverride(formData: FormData) {
   const payload = {
     tenant_id: formData.get('tenant_id')?.toString(),
     flow_type: formData.get('flow_type')?.toString(),
+    trigger_event: formData.get('trigger_event')?.toString() || null,
     touch_number: Number(formData.get('touch_number')),
     brunson_framework: formData.get('brunson_framework')?.toString(),
     label: formData.get('label')?.toString(),
