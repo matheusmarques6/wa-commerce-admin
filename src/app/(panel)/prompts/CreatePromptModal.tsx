@@ -23,8 +23,6 @@ const flowTypes = [
   { id: 'post_delivery_tracking', label: 'Rastreio/Tracking' }
 ]
 
-const frameworks = ['hook', 'story', 'offer', 'hook_story', 'hook_offer', 'story_offer', 'utility']
-
 const triggerEvents: { group: string; options: { id: string; label: string }[] }[] = [
   { group: 'CARRINHO', options: [
     { id: 'carrinho_criado', label: 'Carrinho Criado' },
@@ -113,18 +111,12 @@ export default function CreatePromptModal({ tenants }: Props) {
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Tipo do Fluxo</label>
-              <select name="flow_type" required className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any}>
-                <option value="">Selecione...</option>
-                {flowTypes.map(ft => <option key={ft.id} value={ft.id}>{ft.label}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Número do Toque</label>
-              <input type="number" name="touch_number" required min="1" max="10" defaultValue="1" className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any} />
-            </div>
+          <div>
+            <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Tipo do Fluxo</label>
+            <select name="flow_type" required className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any}>
+              <option value="">Selecione...</option>
+              {flowTypes.map(ft => <option key={ft.id} value={ft.id}>{ft.label}</option>)}
+            </select>
           </div>
 
           <div>
@@ -137,24 +129,6 @@ export default function CreatePromptModal({ tenants }: Props) {
                 </optgroup>
               ))}
             </select>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Brunson Framework</label>
-              <select name="brunson_framework" required className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any}>
-                <option value="">Selecione...</option>
-                {frameworks.map(fw => <option key={fw} value={fw}>{fw}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Tipo de Mensagem</label>
-              <select name="message_type" required defaultValue="conversational" className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any}>
-                <option value="conversational">Conversational</option>
-                <option value="utility">Utility</option>
-                <option value="promotional">Promotional</option>
-              </select>
-            </div>
           </div>
 
           <div>

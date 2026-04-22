@@ -89,16 +89,13 @@ export async function createRecoveryPromptDefault(formData: FormData) {
   const payload = {
     flow_type: formData.get('flow_type')?.toString(),
     trigger_event: formData.get('trigger_event')?.toString() || null,
-    touch_number: Number(formData.get('touch_number')),
-    brunson_framework: formData.get('brunson_framework')?.toString(),
     label: formData.get('label')?.toString(),
-    message_type: formData.get('message_type')?.toString(),
     delay_minutes: Number(formData.get('delay_minutes')),
     customer_emotional_state: formData.get('customer_emotional_state')?.toString(),
     is_active: true
   }
 
-  const { error } = await supabase.from('prompt').insert([payload])
+  const { error } = await supabase.from('prompts').insert([payload])
 
   if (error) {
     console.error('Error creating default prompt:', error)
@@ -116,10 +113,7 @@ export async function createRecoveryPromptOverride(formData: FormData) {
     tenant_id: formData.get('tenant_id')?.toString(),
     flow_type: formData.get('flow_type')?.toString(),
     trigger_event: formData.get('trigger_event')?.toString() || null,
-    touch_number: Number(formData.get('touch_number')),
-    brunson_framework: formData.get('brunson_framework')?.toString(),
     label: formData.get('label')?.toString(),
-    message_type: formData.get('message_type')?.toString(),
     delay_minutes: Number(formData.get('delay_minutes')),
     customer_emotional_state: formData.get('customer_emotional_state')?.toString(),
     is_active: true
