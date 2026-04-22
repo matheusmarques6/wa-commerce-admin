@@ -102,7 +102,6 @@ export async function createPrompt(formData: FormData) {
     customer_thinking: formData.get('customer_thinking')?.toString(),
     customer_needs_to_hear: formData.get('customer_needs_to_hear')?.toString(),
     false_beliefs,
-    system_prompt: formData.get('system_prompt')?.toString(),
     negative_instructions: formData.get('negative_instructions')?.toString() || null,
     dialog_examples,
   }

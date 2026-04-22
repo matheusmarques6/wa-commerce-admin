@@ -59,14 +59,12 @@ export default function CreatePromptModal({ tenants }: Props) {
   const [emotional, setEmotional] = useState('')
   const [thinking, setThinking] = useState('')
   const [needsHear, setNeedsHear] = useState('')
-  const [systemPrompt, setSystemPrompt] = useState('# Role\n\nVocê é um atendente...\n\n## Objetivo\n- ...')
   const [negative, setNegative] = useState('')
   const [beliefs, setBeliefs] = useState<string[]>([''])
   const [examples, setExamples] = useState<Array<{ cliente: string; agente: string }>>([{ cliente: '', agente: '' }])
 
   function reset() {
     setEmotional(''); setThinking(''); setNeedsHear('')
-    setSystemPrompt('# Role\n\nVocê é um atendente...\n\n## Objetivo\n- ...')
     setNegative(''); setBeliefs(['']); setExamples([{ cliente: '', agente: '' }])
   }
 
@@ -79,7 +77,6 @@ export default function CreatePromptModal({ tenants }: Props) {
     formData.set('customer_emotional_state', emotional)
     formData.set('customer_thinking', thinking)
     formData.set('customer_needs_to_hear', needsHear)
-    formData.set('system_prompt', systemPrompt)
     formData.set('negative_instructions', negative)
     formData.set('false_beliefs', JSON.stringify(beliefs.filter(b => b.trim())))
     formData.set('dialog_examples', JSON.stringify(examples.filter(ex => ex.cliente.trim() || ex.agente.trim())))
@@ -168,11 +165,6 @@ export default function CreatePromptModal({ tenants }: Props) {
           <div>
             <label className={labelClass} style={labelStyle}>O Que Precisa Ouvir</label>
             <SmallEditor value={needsHear} onChange={setNeedsHear} />
-          </div>
-
-          <div>
-            <label className={labelClass} style={labelStyle}>System Prompt (instrução principal)</label>
-            <SmallEditor value={systemPrompt} onChange={setSystemPrompt} height={280} />
           </div>
 
           <div>
