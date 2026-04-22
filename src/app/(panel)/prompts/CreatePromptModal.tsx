@@ -1,8 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import Modal from '@/components/Modal'
 import { createRecoveryPromptDefault, createRecoveryPromptOverride } from '../actions'
+import '@uiw/react-md-editor/markdown-editor.css'
+import '@uiw/react-markdown-preview/markdown.css'
+
+const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
 interface Tenant {
   id: string
@@ -12,16 +17,6 @@ interface Tenant {
 interface Props {
   tenants: Tenant[]
 }
-
-const flowTypes = [
-  { id: 'cart_abandoned', label: 'Carrinho Abandonado' },
-  { id: 'checkout_abandoned', label: 'Checkout Abandonado' },
-  { id: 'pix_expired', label: 'PIX Vencido' },
-  { id: 'boleto_pending', label: 'Boleto Pendente' },
-  { id: 'browse_abandoned', label: 'Browse Abandoned' },
-  { id: 'post_delivery_crosssell', label: 'Cross-sell Pós-entrega' },
-  { id: 'post_delivery_tracking', label: 'Rastreio/Tracking' }
-]
 
 const triggerEvents: { group: string; options: { id: string; label: string }[] }[] = [
   { group: 'CARRINHO', options: [
@@ -49,6 +44,7 @@ export default function CreatePromptModal({ tenants }: Props) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [type, setType] = useState<'default' | 'override'>('default')
+  const [content, setContent] = useState<string>('# Role\n\nVocê é um atendente de recuperação...\n\n## Objetivo\n- Reengajar o cliente\n- ...\n\n## Variáveis\n`{{customer_name}}`, `{{order_total}}`')
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -56,7 +52,8 @@ export default function CreatePromptModal({ tenants }: Props) {
     setError('')
 
     const formData = new FormData(e.currentTarget)
-    
+    formData.set('content', content)
+
     let result
     if (type === 'default') {
       result = await createRecoveryPromptDefault(formData)
@@ -74,7 +71,7 @@ export default function CreatePromptModal({ tenants }: Props) {
 
   return (
     <>
-      <button 
+      <button
         onClick={() => setIsOpen(true)}
         className="px-4 py-2 rounded-lg text-sm font-semibold transition-opacity"
         style={{ background: '#22c55e', color: '#000' }}
@@ -84,13 +81,13 @@ export default function CreatePromptModal({ tenants }: Props) {
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Cadastrar Recovery Prompt">
         <div className="flex gap-2 mb-5">
-          <button 
+          <button
             onClick={() => setType('default')}
             className={`flex-1 py-2 text-sm font-semibold rounded-lg border ${type === 'default' ? 'bg-[#22c55e18] text-[#22c55e] border-[#22c55e33]' : 'bg-[#0c0c14] text-[#8888a0] border-[#2a2a3e]'}`}
           >
             Default Playbook
           </button>
-          <button 
+          <button
             onClick={() => setType('override')}
             className={`flex-1 py-2 text-sm font-semibold rounded-lg border ${type === 'override' ? 'bg-[#a855f718] text-[#a855f7] border-[#a855f733]' : 'bg-[#0c0c14] text-[#8888a0] border-[#2a2a3e]'}`}
           >
@@ -112,14 +109,6 @@ export default function CreatePromptModal({ tenants }: Props) {
           )}
 
           <div>
-            <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Tipo do Fluxo</label>
-            <select name="flow_type" required className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any}>
-              <option value="">Selecione...</option>
-              {flowTypes.map(ft => <option key={ft.id} value={ft.id}>{ft.label}</option>)}
-            </select>
-          </div>
-
-          <div>
             <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Evento Gatilho (Webhook Shopify)</label>
             <select name="trigger_event" required className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any}>
               <option value="">Selecione o evento...</option>
@@ -132,18 +121,19 @@ export default function CreatePromptModal({ tenants }: Props) {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Delay (minutos desde o evento)</label>
-            <input type="number" name="delay_minutes" required defaultValue="15" className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any} />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Label Interna</label>
-            <input name="label" required className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any} placeholder="Ex: T1 (Hook) - Abordagem inicial" />
-          </div>
-
-          <div>
             <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Estado Emocional do Cliente (Diretriz)</label>
-            <textarea name="customer_emotional_state" required rows={3} className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2 resize-none" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any} placeholder="Ex: Cliente está quente, mas possivelmente se distraiu na hora do checkout. Foco na escassez." />
+            <textarea name="customer_emotional_state" required rows={2} className="w-full px-3 py-2 rounded-lg text-sm outline-none focus:ring-2 resize-none" style={{ background: '#0c0c14', border: '1px solid #2a2a3e', color: '#e8e8f0', '--tw-ring-color': '#22c55e' } as any} placeholder="Ex: Cliente está quente, mas possivelmente se distraiu na hora do checkout. Foco na escassez." />
+          </div>
+
+          <div data-color-mode="dark">
+            <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: '#5a5a72' }}>Conteúdo do Prompt (Markdown)</label>
+            <MDEditor
+              value={content}
+              onChange={(v) => setContent(v || '')}
+              height={340}
+              preview="edit"
+              visibleDragbar={false}
+            />
           </div>
 
           {error && <div className="p-3 rounded-lg text-sm" style={{ background: '#ef444418', color: '#ef4444', border: '1px solid #ef444433' }}>{error}</div>}

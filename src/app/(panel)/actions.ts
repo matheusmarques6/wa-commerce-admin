@@ -87,12 +87,9 @@ export async function createRecoveryPromptDefault(formData: FormData) {
   const supabase = createAdminClient()
 
   const payload = {
-    flow_type: formData.get('flow_type')?.toString(),
     trigger_event: formData.get('trigger_event')?.toString() || null,
-    label: formData.get('label')?.toString(),
-    delay_minutes: Number(formData.get('delay_minutes')),
+    content: formData.get('content')?.toString() || null,
     customer_emotional_state: formData.get('customer_emotional_state')?.toString(),
-    is_active: true
   }
 
   const { error } = await supabase.from('prompts').insert([payload])
@@ -111,14 +108,11 @@ export async function createRecoveryPromptOverride(formData: FormData) {
 
   const payload = {
     tenant_id: formData.get('tenant_id')?.toString(),
-    flow_type: formData.get('flow_type')?.toString(),
     trigger_event: formData.get('trigger_event')?.toString() || null,
-    label: formData.get('label')?.toString(),
-    delay_minutes: Number(formData.get('delay_minutes')),
+    content: formData.get('content')?.toString() || null,
     customer_emotional_state: formData.get('customer_emotional_state')?.toString(),
-    is_active: true
   }
-  const { error } = await supabase.from('recovery_prompts').insert([payload])
+  const { error } = await supabase.from('prompts').insert([payload])
 
   if (error) {
     console.error('Error creating prompt override:', error)
