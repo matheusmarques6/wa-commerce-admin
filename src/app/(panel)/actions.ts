@@ -83,39 +83,34 @@ export async function createAgent(formData: FormData) {
   return { success: true }
 }
 
-export async function createRecoveryPromptDefault(formData: FormData) {
+export async function createPrompt(formData: FormData) {
   const supabase = createAdminClient()
 
-  const payload = {
-    trigger_event: formData.get('trigger_event')?.toString() || null,
-    content: formData.get('content')?.toString() || null,
-    customer_emotional_state: formData.get('customer_emotional_state')?.toString(),
-  }
-
-  const { error } = await supabase.from('prompts').insert([payload])
-
-  if (error) {
-    console.error('Error creating default prompt:', error)
-    return { error: error.message }
-  }
-
-  revalidatePath('/prompts')
-  return { success: true }
-}
-
-export async function createRecoveryPromptOverride(formData: FormData) {
-  const supabase = createAdminClient()
+  let false_beliefs: string[] = []
+  let dialog_examples: Array<{ cliente: string; agente: string }> = []
+  try {
+    false_beliefs = JSON.parse(formData.get('false_beliefs')?.toString() || '[]')
+  } catch {}
+  try {
+    dialog_examples = JSON.parse(formData.get('dialog_examples')?.toString() || '[]')
+  } catch {}
 
   const payload = {
     tenant_id: formData.get('tenant_id')?.toString(),
-    trigger_event: formData.get('trigger_event')?.toString() || null,
-    content: formData.get('content')?.toString() || null,
+    evento: formData.get('evento')?.toString() || null,
     customer_emotional_state: formData.get('customer_emotional_state')?.toString(),
+    customer_thinking: formData.get('customer_thinking')?.toString(),
+    customer_needs_to_hear: formData.get('customer_needs_to_hear')?.toString(),
+    false_beliefs,
+    system_prompt: formData.get('system_prompt')?.toString(),
+    negative_instructions: formData.get('negative_instructions')?.toString() || null,
+    dialog_examples,
   }
+
   const { error } = await supabase.from('prompts').insert([payload])
 
   if (error) {
-    console.error('Error creating prompt override:', error)
+    console.error('Error creating prompt:', error)
     return { error: error.message }
   }
 
