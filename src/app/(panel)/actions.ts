@@ -106,7 +106,9 @@ export async function createPrompt(formData: FormData) {
     dialog_examples,
   }
 
-  const { error } = await supabase.from('prompts').insert([payload])
+  console.log('>>> createPrompt payload:', payload)
+  const { error, data } = await supabase.from('prompts').insert([payload]).select()
+  console.log('>>> createPrompt result:', { error, data })
 
   if (error) {
     console.error('Error creating prompt:', error)

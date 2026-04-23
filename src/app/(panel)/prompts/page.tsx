@@ -1,6 +1,8 @@
 import { createAdminClient } from '@/lib/supabase-server'
 import CreatePromptModal from './CreatePromptModal'
 
+export const dynamic = 'force-dynamic'
+
 const eventLabels: Record<string, string> = {
   carrinho_criado: 'Carrinho Criado',
   carrinho_atualizado: 'Carrinho Atualizado',
@@ -26,10 +28,26 @@ function eventGroup(ev: string | null | undefined): string {
 export default async function PromptsPage() {
   const supabase = createAdminClient()
 
-  const [{ data: prompts }, { data: tenants }] = await Promise.all([
+  const [promptsResponse, tenantsResponse] = await Promise.all([
     supabase.from('prompts').select('*, tenants(name)').order('evento'),
     supabase.from('tenants').select('id, name').order('name')
   ])
+
+  if (promptsResponse.error) {
+    console.error('Error fetching prompts:', promptsResponse.error)
+    return (
+      <div className="p-5 rounded-lg border border-red-500/30 bg-red-500/10 text-red-500">
+        <h3 className="font-bold mb-2">Erro ao carregar prompts</h3>
+        <p className="font-mono text-sm">{promptsResponse.error.message}</p>
+        <pre className="mt-4 p-4 bg-black/50 rounded text-xs overflow-auto">
+          {JSON.stringify(promptsResponse.error, null, 2)}
+        </pre>
+      </div>
+    )
+  }
+
+  const prompts = promptsResponse.data
+  const tenants = tenantsResponse.data
 
   const all = prompts || []
   const groups = [...new Set(all.map((p: any) => eventGroup(p.evento)))]
