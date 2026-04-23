@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase-server'
 import CreatePromptModal from './CreatePromptModal'
+import EditPromptModal from './EditPromptModal'
 
 export const dynamic = 'force-dynamic'
 
@@ -78,8 +79,11 @@ export default async function PromptsPage() {
                 </div>
                 <div className="grid grid-cols-3 gap-3">
                   {items.map((p: any, i: number) => (
-                    <div key={i} className="rounded-lg p-3" style={{ background: '#0c0c14', border: '1px solid #2a2a3e44' }}>
-                      <div className="flex items-center justify-between mb-2">
+                    <div key={i} className="rounded-lg p-3 relative group" style={{ background: '#0c0c14', border: '1px solid #2a2a3e44' }}>
+                      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <EditPromptModal tenants={tenants || []} prompt={p} />
+                      </div>
+                      <div className="flex items-center justify-between mb-2 pr-12">
                         <span className="text-xs font-semibold" style={{ color: '#e8e8f0' }}>{p.tenants?.name || '—'}</span>
                         <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold" style={{ background: '#2a2a3e', color: '#8888a0' }}>v{p.version}</span>
                       </div>

@@ -119,6 +119,57 @@ export async function createPrompt(formData: FormData) {
   return { success: true }
 }
 
+export async function updatePrompt(formData: FormData) {
+  const supabase = createAdminClient()
+  const id = formData.get('id')?.toString()
+
+  if (!id) return { error: 'ID do prompt não encontrado' }
+
+  let false_beliefs: string[] = []
+  let dialog_examples: Array<{ cliente: string; agente: string }> = []
+  try {
+    false_beliefs = JSON.parse(formData.get('false_beliefs')?.toString() || '[]')
+  } catch {}
+  try {
+    dialog_examples = JSON.parse(formData.get('dialog_examples')?.toString() || '[]')
+  } catch {}
+
+  const payload = {
+    tenant_id: formData.get('tenant_id')?.toString(),
+    evento: formData.get('evento')?.toString() || null,
+    customer_emotional_state: formData.get('customer_emotional_state')?.toString(),
+    customer_thinking: formData.get('customer_thinking')?.toString(),
+    customer_needs_to_hear: formData.get('customer_needs_to_hear')?.toString(),
+    false_beliefs,
+    negative_instructions: formData.get('negative_instructions')?.toString() || null,
+    dialog_examples,
+  }
+
+  const { error } = await supabase.from('prompts').update(payload).eq('id', id)
+
+  if (error) {
+    console.error('Error updating prompt:', error)
+    return { error: error.message }
+  }
+
+  revalidatePath('/prompts')
+  return { success: true }
+}
+
+export async function deletePrompt(id: string) {
+  const supabase = createAdminClient()
+
+  const { error } = await supabase.from('prompts').delete().eq('id', id)
+
+  if (error) {
+    console.error('Error deleting prompt:', error)
+    return { error: error.message }
+  }
+
+  revalidatePath('/prompts')
+  return { success: true }
+}
+
 export async function linkWhatsAppAccount(formData: FormData) {
   const supabase = createAdminClient()
 
